@@ -1,0 +1,87 @@
+﻿
+> jetblue-clone@0.1.0 build
+> next build
+
+Ôû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+Ô£ô Compiled successfully in 2.4s
+  Running TypeScript ...
+  Collecting page data using 11 workers ...
+Initializing Modular Database...
+node.exe : SqliteError: 
+FOREIGN KEY constraint failed
+En línea: 1 Carácter: 1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + CategoryInfo            
+  : NotSpecified:     
+(SqliteError: FO...n    
+straint failed:Strin    g) 
+[], RemoteExcepti    on
+    + FullyQualifiedErro    
+rId : NativeCommandE    rror
+ 
+    at <unknown> (C:\Users\luc
+he\.gemini\antigravity\scratch
+\jetblue-clone\.next\server\ch
+unks\[root-of-the-server]__8ce
+aca58._.js:11:277)
+    at module evaluation (C:\U
+sers\luche\.gemini\antigravity
+\scratch\jetblue-clone\.next\s
+erver\chunks\[root-of-the-serv
+er]__8ceaca58._.js:46:2554)
+    at instantiateModule (C:\U
+sers\luche\.gemini\antigravity
+\scratch\jetblue-clone\.next\s
+erver\chunks\[turbopack]_runti
+me.js:740:9)
+    at getOrInstantiateModuleF
+romParent (C:\Users\luche\.gem
+ini\antigravity\scratch\jetblu
+e-clone\.next\server\chunks\[t
+urbopack]_runtime.js:763:12)
+    at Context.esmImport [as 
+i] (C:\Users\luche\.gemini\ant
+igravity\scratch\jetblue-clone
+\.next\server\chunks\[turbopac
+k]_runtime.js:228:20)
+    at module evaluation (C:\U
+sers\luche\.gemini\antigravity
+\scratch\jetblue-clone\.next\s
+erver\chunks\[root-of-the-serv
+er]__8ceaca58._.js:70:363)
+    at instantiateModule (C:\U
+sers\luche\.gemini\antigravity
+\scratch\jetblue-clone\.next\s
+erver\chunks\[turbopack]_runti
+me.js:740:9)
+    at 
+instantiateRuntimeModule (C:\U
+sers\luche\.gemini\antigravity
+\scratch\jetblue-clone\.next\s
+erver\chunks\[turbopack]_runti
+me.js:768:12)
+    at 
+getOrInstantiateRuntimeModule 
+(C:\Users\luche\.gemini\antigr
+avity\scratch\jetblue-clone\.n
+ext\server\chunks\[turbopack]_
+runtime.js:781:12) {
+  code: 
+'SQLITE_CONSTRAINT_FOREIGNKEY'
+}
+
+> Build error occurred
+Error: Failed to collect page 
+data for /api/airports
+    at ignore-listed frames {
+  type: 'Error'
+}

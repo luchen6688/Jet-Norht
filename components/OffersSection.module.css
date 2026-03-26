@@ -1,0 +1,87 @@
+.offersSection {
+    padding: 5rem 4rem;
+    background-color: var(--bg-color);
+}
+
+.sectionTitle {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-blue);
+    margin-bottom: 2.5rem;
+    letter-spacing: -0.5px;
+}
+
+.offersGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.offerCard {
+    background: #FFF;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.offerCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 34, 68, 0.12);
+}
+
+.imageWrapper {
+    height: 200px;
+    overflow: hidden;
+}
+
+.imageWrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.offerCard:hover .imageWrapper img {
+    transform: scale(1.05);
+}
+
+.cardContent {
+    padding: 1.5rem;
+}
+
+.cardContent h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.cardContent p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.price {
+    color: var(--primary-blue);
+    font-size: 1.1rem;
+}
+
+.bookBtn {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: transparent;
+    color: var(--secondary-blue);
+    border: 2px solid var(--secondary-blue);
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.offerCard:hover .bookBtn {
+    background-color: var(--secondary-blue);
+    color: #FFF;
+}

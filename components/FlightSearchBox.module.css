@@ -1,0 +1,474 @@
+.searchContainer {
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 16px 48px rgba(0, 34, 68, 0.2);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 1100px;
+    padding: 1.5rem;
+    color: var(--text-dark);
+    text-align: left;
+    position: relative;
+}
+
+.tripTypes {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.typeBtn {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.activeType {
+    color: var(--primary-blue);
+    font-weight: 700;
+}
+
+.activeType::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: -17px;
+    left: 0;
+    background-color: var(--primary-blue);
+    border-radius: 3px 3px 0 0;
+}
+
+.searchForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.inputGroup {
+    flex: 1 1 calc(20% - 1rem);
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+}
+
+.inputGroup label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.inputGroup select,
+.inputGroup input {
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #E5E7EB;
+    font-size: 1rem;
+    background-color: #FFFFFF;
+    color: var(--text-dark);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.inputGroup select:focus,
+.inputGroup input:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 0 3px rgba(0, 176, 240, 0.2);
+}
+
+.searchBtn {
+    padding: 0.9rem 2rem;
+    background-color: var(--secondary-blue);
+    color: white;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    flex: 0 0 auto;
+}
+
+.searchBtn:hover {
+    background-color: var(--primary-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 34, 68, 0.3);
+}
+
+/* Results Overlay inside the box (or under it) */
+.resultsContainer {
+    margin-top: 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 1.5rem;
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes pulse {
+    0% { background-color: #f0f0f0; }
+    50% { background-color: #e0e0e0; }
+    100% { background-color: #f0f0f0; }
+}
+
+.skeleton {
+    animation: pulse 1.5s infinite ease-in-out;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+}
+
+.skeletonText {
+    height: 1.2rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.skeletonPrice {
+    height: 1.5rem;
+    width: 60px;
+    margin-left: auto;
+}
+
+.skeletonBtn {
+    height: 2.2rem;
+    width: 100px;
+    margin-left: auto;
+}
+
+.resultsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.resultsHeader h3 {
+    font-size: 1.25rem;
+    color: var(--primary-blue);
+}
+
+.closeBtn {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    line-height: 1;
+}
+
+.closeBtn:hover {
+    color: var(--text-dark);
+}
+
+.flightList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.flightItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    background-color: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 16px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.flightItem:hover {
+    transform: scale(1.02) translateX(4px);
+    box-shadow: 0 12px 30px rgba(0, 34, 68, 0.1);
+    border-color: var(--accent-cyan);
+}
+
+.flightTime {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.flightRoute {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.flightAction {
+    text-align: right;
+}
+
+.flightPrice {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-blue);
+    margin-bottom: 0.3rem;
+}
+
+.selectBtn {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.selectBtn:hover {
+    background-color: var(--accent-cyan);
+}
+
+.noResults {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+/* Modal Confirmation Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 15, 30, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modalContent {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 3rem 2.5rem;
+    width: 90%;
+    max-width: 420px;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modalIcon {
+    width: 72px;
+    height: 72px;
+    background: rgba(0, 176, 240, 0.15);
+    color: var(--primary-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 32px;
+}
+
+.modalTitle {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--primary-blue);
+    margin-bottom: 0.8rem;
+}
+
+.modalText {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.referenceCode {
+    display: inline-block;
+    background: #f1f5f9;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--secondary-blue);
+    border: 1px dashed var(--accent-cyan);
+    margin: 0.5rem 0 1.5rem;
+    font-size: 1.25rem;
+}
+
+.modalBtn {
+    display: block;
+    width: 100%;
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.modalBtn:hover {
+    background-color: var(--accent-cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 176, 240, 0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(30px) scale(0.95); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Payment Modal Styles */
+.paymentModalContent {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 2.5rem 2.5rem 2rem;
+    width: 90%;
+    max-width: 450px;
+    position: relative;
+    box-shadow: 0 40px 60px -15px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.closePaymentBtn {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.closePaymentBtn:hover {
+    color: #4b5563;
+}
+
+.paymentTitle {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #0f172a;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.paymentSummary {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.summaryRow:last-child {
+    margin-bottom: 0;
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+}
+
+.summaryLabel {
+    color: #475569;
+    font-weight: 500;
+}
+
+.summaryValue {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.summaryPrice {
+    font-weight: 800;
+    color: #002244;
+}
+
+.paymentInputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.halfWidth {
+    width: calc(50% - 0.5rem);
+}
+
+.paymentInput {
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    font-size: 1rem;
+    color: #334155;
+    background-color: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.paymentInput:focus {
+    border-color: #002244;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 34, 68, 0.1);
+}
+
+.paymentInput::placeholder {
+    color: #94a3b8;
+}
+
+.paymentSubmitBtn {
+    display: block;
+    width: 100%;
+    background-color: #0033a0; /* Deeper blue for submit */
+    color: white;
+    padding: 1.1rem;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    transition: background-color 0.2s;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 1.2rem;
+}
+
+.paymentSubmitBtn:hover {
+    background-color: #002244;
+}
+
+.paymentSubmitBtn:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.paymentFooter {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #94a3b8;
+}

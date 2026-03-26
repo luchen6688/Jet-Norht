@@ -1,0 +1,95 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 1.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    color: var(--text-light);
+}
+
+.navbarScrolled {
+    background-color: rgba(0, 34, 68, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 4rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    cursor: pointer;
+}
+
+.navLinks {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+}
+
+.navLink {
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    position: relative;
+}
+
+.navLink::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -6px;
+    left: 0;
+    background-color: var(--accent-cyan);
+    transition: width 0.3s ease;
+}
+
+.navLink:hover::after {
+    width: 100%;
+}
+
+.authButtons {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.btnSign {
+    color: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.btnSign:hover {
+    color: var(--accent-cyan);
+}
+
+.btnJoin {
+    background: var(--text-light);
+    color: var(--primary-blue);
+    padding: 0.6rem 1.5rem;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.btnJoin:hover {
+    background: var(--accent-cyan);
+    color: var(--text-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 176, 240, 0.4);
+}
+
+.userName {
+    font-weight: 600;
+    margin-right: 0.5rem;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+}
