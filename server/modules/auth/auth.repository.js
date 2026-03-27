@@ -18,5 +18,13 @@ export const authRepository = {
     createAuditLog({ userId, event, detail, ipAddress }) {
         return db.prepare('INSERT INTO audit_logs (user_id, event, detail, ip_address) VALUES (?, ?, ?, ?)')
             .run(userId || null, event, detail, ipAddress);
+    },
+
+    findAll() {
+        return db.prepare('SELECT id, name, email, role, is_active, created_at FROM users ORDER BY created_at DESC').all();
+    },
+
+    updateUser(id, { role, is_active }) {
+        return db.prepare('UPDATE users SET role = ?, is_active = ? WHERE id = ?').run(role, is_active, id);
     }
 };

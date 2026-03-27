@@ -67,5 +67,39 @@ export const bookingRepository = {
 
     isReferenceExists(reference) {
         return db.prepare('SELECT id FROM bookings WHERE booking_reference = ?').get(reference);
+    },
+
+    findAll({ status, origin, destination } = {}) {
+        let query = `
+            SELECT b.*, f.date, f.gate, f.price,
+                   r.flight_number, r.scheduled_departure_time, r.scheduled_arrival_time,
+                   r.origin, r.destination,
+                   ao.city AS origin_city, ad.city AS destination_city,
+                   u.name as user_name, u.email as user_email
+            FROM bookings b
+            JOIN flights f ON b.flight_id = f.id
+            JOIN routes r ON f.route_id = r.id
+            LEFT JOIN airports ao ON r.origin = ao.code
+            LEFT JOIN airports ad ON r.destination = ad.code
+            LEFT JOIN users u ON b.user_id = u.id
+            WHERE 1=1
+        `;
+        const params = [];
+
+        if (status && status !== 'Todos') {
+            query += " AND b.status = ?";
+            params.push(status);
+        }
+        if (origin && origin !== 'Todos') {
+            query += " AND r.origin = ?";
+            params.push(origin);
+        }
+        if (destination && destination !== 'Todos') {
+            query += " AND r.destination = ?";
+            params.push(destination);
+        }
+
+        query += " ORDER BY b.created_at DESC";
+        return db.prepare(query).all(...params);
     }
 };

@@ -13,14 +13,22 @@ export async function GET(request) {
 
         // Only allow users to see their own logs unless admin
         const { searchParams } = new URL(request.url);
-        const queryUserId = parseInt(searchParams.get('userId'));
+        const queryUserId = searchParams.get('userId') ? parseInt(searchParams.get('userId')) : null;
 
         if (payload.role !== 'admin' && queryUserId !== payload.userId) {
             return NextResponse.json({ error: 'Prohibido' }, { status: 403 });
         }
 
         const { auditService } = await import('@/server/modules/audit/audit.service');
-        const logs = await auditService.getUserLogs(queryUserId);
+        let logs;
+        
+        if (payload.role === 'admin' && !queryUserId) {
+            // Admin requesting ALL logs
+            logs = await auditService.getLogs();
+        } else {
+            // Specific user logs (or admin requesting a specific user)
+            logs = await auditService.getUserLogs(queryUserId || payload.userId);
+        }
         
         return NextResponse.json({ success: true, logs });
     } catch (error) {

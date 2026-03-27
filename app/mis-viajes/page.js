@@ -165,6 +165,9 @@ export default function MisViajes() {
                             <button onClick={() => setView('bookings')} className={`${styles.tabBtn} ${view === 'bookings' ? styles.tabBtnActive : ''}`}>Mis Reservas</button>
                             <button onClick={() => setView('profile')} className={`${styles.tabBtn} ${view === 'profile' ? styles.tabBtnActive : ''}`}>Mi Perfil</button>
                             <button onClick={() => setView('activity')} className={`${styles.tabBtn} ${view === 'activity' ? styles.tabBtnActive : ''}`}>Actividad</button>
+                            {user.role === 'admin' && (
+                                <button onClick={() => setView('admin')} className={`${styles.tabBtn} ${view === 'admin' ? styles.tabBtnActive : ''}`}>Administración</button>
+                            )}
                         </nav>
                     )}
 
@@ -202,6 +205,9 @@ export default function MisViajes() {
                                                     </div>
                                                     <div style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontWeight: 500 }}>
                                                         {b.date} | {b.scheduled_departure_time} - {b.scheduled_arrival_time} | Vuelo {b.flight_number}
+                                                    </div>
+                                                    <div style={{ fontSize: '0.85rem', color: 'var(--primary-blue)', marginTop: '0.25rem', fontWeight: 600 }}>
+                                                        Sala: {b.gate || 'Por asignar'} | Aeronave: Airbus A321neo
                                                     </div>
                                                 </div>
                                                 <div className={styles.priceTag}>
@@ -282,6 +288,20 @@ export default function MisViajes() {
                         </div>
                     )}
 
+                    {view === 'admin' && user && user.role === 'admin' && (
+                        <div style={{ textAlign: 'center' }}>
+                            <h3 style={{ color: 'var(--primary-blue)', marginBottom: '1.5rem' }}>Panel de Administración: Auditoría Global</h3>
+                            <AuditHistory isAdmin={true} />
+                        </div>
+                    )}
+
+                    {view === 'admin' && user && user.role === 'admin' && (
+                        <div style={{ textAlign: 'center' }}>
+                            <h3 style={{ color: 'var(--primary-blue)', marginBottom: '1.5rem' }}>Panel de Administración: Auditoría Global</h3>
+                            <AuditHistory isAdmin={true} />
+                        </div>
+                    )}
+
                 </div>
             </div>
 
@@ -296,8 +316,14 @@ export default function MisViajes() {
                                 >
                                     ×
                                 </button>
-                                <h2 className={styles.paymentTitle}>Finalizar Pago</h2>
+                                <h2 className={styles.paymentTitle}>Método de Pago Seguro</h2>
                                 
+                                <div className={styles.paymentSelector}>
+                                    <button className={styles.methodBtnActive}>💳 Tarjeta</button>
+                                    <button className={styles.methodBtn}>🅿️ PayPal</button>
+                                    <button className={styles.methodBtn}>🍏 Apple Pay</button>
+                                </div>
+
                                 <div className={styles.paymentSummary}>
                                     <div className={styles.summaryRow}>
                                         <span className={styles.summaryLabel}>Reserva:</span>
@@ -322,27 +348,29 @@ export default function MisViajes() {
                                             defaultValue="4242 4242 4242 4242"
                                             required 
                                         />
-                                        <input 
-                                            type="text" 
-                                            className={`${styles.paymentInput} ${styles.halfWidth}`} 
-                                            placeholder="MM/AA" 
-                                            defaultValue="12/26"
-                                            required 
-                                        />
-                                        <input 
-                                            type="text" 
-                                            className={`${styles.paymentInput} ${styles.halfWidth}`} 
-                                            placeholder="CVV" 
-                                            defaultValue="123"
-                                            required 
-                                        />
+                                        <div style={{ display: 'flex', gap: '1rem' }}>
+                                            <input 
+                                                type="text" 
+                                                className={`${styles.paymentInput} ${styles.halfWidth}`} 
+                                                placeholder="MM/AA" 
+                                                defaultValue="12/26"
+                                                required 
+                                            />
+                                            <input 
+                                                type="text" 
+                                                className={`${styles.paymentInput} ${styles.halfWidth}`} 
+                                                placeholder="CVV" 
+                                                defaultValue="123"
+                                                required 
+                                            />
+                                        </div>
                                     </div>
                                     
                                     <button type="submit" className={styles.paymentSubmitBtn} disabled={isPaying}>
-                                        {isPaying ? 'Procesando Pago...' : `Pagar $${selectedBooking.price}`}
+                                        {isPaying ? 'Procesando Pago Seguro...' : `Pagar $${selectedBooking.price}`}
                                     </button>
                                 </form>
-                                <p className={styles.paymentFooter}>Pago seguro encriptado con SSL de 256 bits.</p>
+                                <p className={styles.paymentFooter}>Pagos protegidos con encriptación de nivel bancario.</p>
                             </>
                         ) : (
                             <div style={{ textAlign: 'center', padding: '1rem 0' }}>
@@ -377,13 +405,14 @@ export default function MisViajes() {
     );
 }
 
-function AuditHistory({ userId }) {
+function AuditHistory({ userId, isAdmin = false }) {
     const [logs, setLogs] = useState([]);
 
     useEffect(() => {
         const fetchLogs = async () => {
             try {
-                const res = await fetch(`/api/audit?userId=${userId}`);
+                const url = isAdmin ? '/api/audit' : `/api/audit?userId=${userId}`;
+                const res = await fetch(url);
                 const data = await res.json();
                 if (res.ok) {
                     setLogs(data.logs || []);
@@ -393,18 +422,28 @@ function AuditHistory({ userId }) {
             }
         };
         fetchLogs();
-    }, [userId]);
+    }, [userId, isAdmin]);
 
     if (logs.length === 0) return <p style={{ fontSize: '0.85rem', color: '#999' }}>No hay actividad reciente.</p>;
 
     return (
         <div style={{ fontSize: '0.85rem' }}>
             {logs.map(log => (
-                <div key={log.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #f0f0f0' }}>
-                    <span style={{ color: 'var(--text-dark)' }}>
-                        <strong>{log.event}:</strong> {log.detail}
-                    </span>
-                    <span style={{ color: '#999' }}>{new Date(log.created_at).toLocaleString()}</span>
+                <div key={log.id} style={{ display: 'flex', flexDirection: 'column', padding: '0.8rem 0', borderBottom: '1px solid #f0f0f0', textAlign: 'left' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                        <span style={{ color: 'var(--primary-blue)', fontWeight: 'bold' }}>
+                            {log.event}
+                        </span>
+                        <span style={{ color: '#999' }}>{new Date(log.created_at).toLocaleString()}</span>
+                    </div>
+                    <div style={{ color: 'var(--text-dark)', marginBottom: '0.25rem' }}>
+                        {log.detail}
+                    </div>
+                    {isAdmin && (
+                        <div style={{ fontSize: '0.75rem', color: 'var(--accent-teal)', fontWeight: '500' }}>
+                            Usuario: {log.user_name || 'Sistema'} ({log.user_email || 'n/a'}) | IP: {log.ip_address || 'n/a'}
+                        </div>
+                    )}
                 </div>
             ))}
         </div>

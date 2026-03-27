@@ -51,5 +51,23 @@ export const flightRepository = {
 
     updateGate(id, gate) {
         return db.prepare('UPDATE flights SET gate = ? WHERE id = ?').run(gate, id);
+    },
+
+    findAll() {
+        return db.prepare(`
+            SELECT f.*, r.flight_number, r.origin, r.destination, 
+                   r.scheduled_departure_time, r.scheduled_arrival_time,
+                   ao.city AS origin_city, ad.city AS destination_city
+            FROM flights f
+            JOIN routes r ON f.route_id = r.id
+            LEFT JOIN airports ao ON r.origin = ao.code
+            LEFT JOIN airports ad ON r.destination = ad.code
+            ORDER BY f.date DESC, r.scheduled_departure_time ASC
+        `).all();
+    },
+
+    updateFlight(id, { price, gate }) {
+        return db.prepare('UPDATE flights SET price = ?, gate = ? WHERE id = ?')
+            .run(price, gate, id);
     }
 };

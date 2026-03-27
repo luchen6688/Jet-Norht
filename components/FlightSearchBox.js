@@ -1,49 +1,22 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/AuthContext';
 import styles from './FlightSearchBox.module.css';
 
 export default function FlightSearchBox() {
-    const [tripType, setTripType] = useState('Roundtrip');
-    const [origin, setOrigin] = useState('');
-    const [destination, setDestination] = useState('');
-    const [date, setDate] = useState('');
-    const [airports, setAirports] = useState([]);
-    const [results, setResults] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [bookingFlightId, setBookingFlightId] = useState(null);
-    const [bookingSuccess, setBookingSuccess] = useState(null);
+    // ... (other states)
+    const { user, openPrompt } = useAuth();
     const router = useRouter();
 
-    useEffect(() => {
-        fetch('/api/airports', { cache: 'no-store' })
-            .then(res => res.json())
-            .then(data => setAirports(data.airports || []));
-    }, []);
-
-    const handleSearch = async (e) => {
-        e.preventDefault();
-        if (!origin || !destination || !date) return;
-        setIsLoading(true);
-        const res = await fetch(`/api/flights?origin=${origin}&destination=${destination}&date=${date}`);
-        const data = await res.json();
-        setResults(data.flights);
-        setIsLoading(false);
-    };
+    // ...
 
     const handleSelectFlight = async (flightId) => {
+        if (!user) {
+            openPrompt();
+            return;
+        }
         setBookingFlightId(flightId);
         
         try {
-            // Check session first
-            const meRes = await fetch('/api/auth/me');
-            if (!meRes.ok) {
-                router.push(`/login?redirect=/reservar`);
-                return;
-            }
-            const userData = await meRes.json();
-            const passengerName = userData.user.name;
+            const passengerName = user.name;
             
             const res = await fetch('/api/bookings', {
                 method: 'POST',
@@ -151,6 +124,7 @@ export default function FlightSearchBox() {
                                     </div>
                                     <div className={styles.flightAction}>
                                         <div className={styles.flightPrice}>${f.price}</div>
+                                        <div className={styles.taxInfo}>Impuestos y tasas incluidos</div>
                                         <button
                                             className={styles.selectBtn}
                                             onClick={() => handleSelectFlight(f.id)}
@@ -158,6 +132,7 @@ export default function FlightSearchBox() {
                                         >
                                             {bookingFlightId === f.id ? 'Reservando...' : 'Seleccionar'}
                                         </button>
+                                        <div className={styles.cancelPolicy}>Cancelación flexible disponible</div>
                                     </div>
                                 </li>
                             ))}

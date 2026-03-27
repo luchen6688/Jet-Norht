@@ -7,7 +7,13 @@ export const auditRepository = {
     },
 
     findAll(limit = 100) {
-        return db.prepare('SELECT * FROM audit_logs ORDER BY created_at DESC LIMIT ?').all(limit);
+        return db.prepare(`
+            SELECT a.*, u.name as user_name, u.email as user_email 
+            FROM audit_logs a
+            LEFT JOIN users u ON a.user_id = u.id
+            ORDER BY a.created_at DESC 
+            LIMIT ?
+        `).all(limit);
     },
 
     findByUser(userId) {

@@ -74,6 +74,35 @@
     margin-bottom: 0.5rem;
 }
 
+/* Payment Selector Styles */
+.paymentSelector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.methodBtn, .methodBtnActive {
+    flex: 1;
+    padding: 0.75rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid #EEE;
+    background: #F9F9F9;
+}
+
+.methodBtnActive {
+    background: var(--primary-blue);
+    color: #FFF;
+    border-color: var(--primary-blue);
+}
+
+.methodBtn:hover {
+    background: #EEE;
+}
+
 .inputGroup input {
     padding: 1rem;
     border-radius: 8px;

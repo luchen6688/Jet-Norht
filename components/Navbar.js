@@ -2,50 +2,26 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import styles from './Navbar.module.css';
+
+import { useAuth } from '@/lib/AuthContext';
 import styles from './Navbar.module.css';
 
 export default function Navbar() {
+    const pathname = usePathname();
+    const { user, loading, logout } = useAuth();
     const [scrolled, setScrolled] = useState(false);
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const router = useRouter();
-
-    const fetchSession = useCallback(async () => {
-        try {
-            const res = await fetch('/api/auth/me', { cache: 'no-store' });
-            if (res.ok) {
-                const data = await res.json();
-                setUser(data.user);
-            } else {
-                setUser(null);
-            }
-        } catch {
-            setUser(null);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 50);
         window.addEventListener('scroll', handleScroll);
-
-        // Verificar sesión desde la API (cookie HttpOnly)
-        fetchSession();
-
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [fetchSession]);
+    }, []);
 
-    const handleLogout = async () => {
-        try {
-            await fetch('/api/auth/logout', { method: 'POST' });
-        } finally {
-            setUser(null);
-            router.push('/');
-            router.refresh();
-        }
-    };
+    if (pathname?.startsWith('/admin')) {
+        return null;
+    }
 
     return (
         <nav className={`${styles.navbar} ${scrolled ? styles.navbarScrolled : ''}`}>
@@ -66,7 +42,7 @@ export default function Navbar() {
                 ) : user ? (
                     <>
                         <span className={styles.userName}>Hola, {user.name.split(' ')[0]}</span>
-                        <button onClick={handleLogout} className={styles.btnJoin}>Salir</button>
+                        <button onClick={logout} className={styles.btnJoin}>Salir</button>
                     </>
                 ) : (
                     <>

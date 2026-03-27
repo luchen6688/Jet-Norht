@@ -235,6 +235,19 @@
     background-color: var(--accent-cyan);
 }
 
+.taxInfo {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0.25rem 0 0.5rem;
+}
+
+.cancelPolicy {
+    font-size: 0.75rem;
+    color: #2e7d32;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
 .noResults {
     text-align: center;
     padding: 2rem;
