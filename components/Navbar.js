@@ -6,8 +6,6 @@ import { useRouter, usePathname } from 'next/navigation';
 import styles from './Navbar.module.css';
 
 import { useAuth } from '@/lib/AuthContext';
-import styles from './Navbar.module.css';
-
 export default function Navbar() {
     const pathname = usePathname();
     const { user, loading, logout } = useAuth();

@@ -1,12 +1,11 @@
-'use client';
+﻿'use client';
 
-import { useAuth } from '@/lib/AuthContext';
-import styles from './FlightSearchBox.module.css';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import styles from './FlightSearchBox.module.css';
 
 export default function FlightSearchBox() {
-    const [tripType, setTripType] = useState('Ida y vuelta');
+    const [tripType, setTripType] = useState('Roundtrip');
     const [origin, setOrigin] = useState('');
     const [destination, setDestination] = useState('');
     const [date, setDate] = useState('');
@@ -15,42 +14,36 @@ export default function FlightSearchBox() {
     const [isLoading, setIsLoading] = useState(false);
     const [bookingFlightId, setBookingFlightId] = useState(null);
     const [bookingSuccess, setBookingSuccess] = useState(null);
-    
-    const { user, openPrompt } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
         fetch('/api/airports', { cache: 'no-store' })
             .then(res => res.json())
-            .then(data => setAirports(data?.airports || []))
-            .catch(() => setAirports([]));
+            .then(data => setAirports(data.airports || []));
     }, []);
 
     const handleSearch = async (e) => {
         e.preventDefault();
         if (!origin || !destination || !date) return;
         setIsLoading(true);
-        try {
-            const res = await fetch(`/api/flights?origin=${origin}&destination=${destination}&date=${date}`);
-            const data = await res.json();
-            setResults(data?.flights || []);
-        } catch (error) {
-            console.error('Error fetching flights:', error);
-            setResults([]);
-        } finally {
-            setIsLoading(false);
-        }
+        const res = await fetch(`/api/flights?origin=${origin}&destination=${destination}&date=${date}`);
+        const data = await res.json();
+        setResults(data.flights);
+        setIsLoading(false);
     };
 
     const handleSelectFlight = async (flightId) => {
-        if (!user) {
-            openPrompt();
-            return;
-        }
         setBookingFlightId(flightId);
         
         try {
-            const passengerName = user.name;
+            // Check session first
+            const meRes = await fetch('/api/auth/me');
+            if (!meRes.ok) {
+                router.push(`/login?redirect=/reservar`);
+                return;
+            }
+            const userData = await meRes.json();
+            const passengerName = userData.user.name;
             
             const res = await fetch('/api/bookings', {
                 method: 'POST',
@@ -131,7 +124,7 @@ export default function FlightSearchBox() {
                 <div className={styles.resultsContainer}>
                     <div className={styles.resultsHeader}>
                         <h3>Resultados de vuelo</h3>
-                        <button className={styles.closeBtn} onClick={() => setResults(null)}>×</button>
+                        <button className={styles.closeBtn} onClick={() => setResults(null)}>├ù</button>
                     </div>
                     {isLoading ? (
                         <ul className={styles.flightList}>
@@ -158,7 +151,6 @@ export default function FlightSearchBox() {
                                     </div>
                                     <div className={styles.flightAction}>
                                         <div className={styles.flightPrice}>${f.price}</div>
-                                        <div className={styles.taxInfo}>Impuestos y tasas incluidos</div>
                                         <button
                                             className={styles.selectBtn}
                                             onClick={() => handleSelectFlight(f.id)}
@@ -166,7 +158,6 @@ export default function FlightSearchBox() {
                                         >
                                             {bookingFlightId === f.id ? 'Reservando...' : 'Seleccionar'}
                                         </button>
-                                        <div className={styles.cancelPolicy}>Cancelación flexible disponible</div>
                                     </div>
                                 </li>
                             ))}
@@ -182,11 +173,11 @@ export default function FlightSearchBox() {
                 <div className={styles.modalOverlay}>
                     <div className={styles.modalContent}>
                         <div className={styles.modalIcon}>
-                            ✓
+                            Ô£ô
                         </div>
-                        <h2 className={styles.modalTitle}>¡Reserva Creada!</h2>
+                        <h2 className={styles.modalTitle}>┬íReserva Creada!</h2>
                         <p className={styles.modalText}>
-                            Tu reserva ha sido generada exitosamente, pendiente de pago. Aquí tienes tu código:
+                            Tu reserva ha sido generada exitosamente, pendiente de pago. Aqu├¡ tienes tu c├│digo:
                         </p>
                         <div className={styles.referenceCode}>
                             {bookingSuccess}
